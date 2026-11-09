@@ -1,5 +1,3 @@
-
-import estudiantes.*
 class DocenteBasico {
     var esGuardavidas
 
@@ -12,6 +10,12 @@ class DocenteBasico {
     method disminuirCupo() {
         
     }
+    method sueldoDe(_curso) {
+        return 20 + (_curso.recaudacionBruta() *self.porcentaje())
+    }
+    method porcentaje() {
+        return 0.1
+    }
 }
 
 class Dedicado inherits DocenteBasico {
@@ -19,6 +23,9 @@ class Dedicado inherits DocenteBasico {
 
     override method estaHabilitadoADarClasesA(_estudiante) {
         return _estudiante.domina(estilo)
+    }
+    override method porcentaje() {
+        return 0.15
     }
 }
 
@@ -37,5 +44,8 @@ class Externo inherits DocenteBasico {
     }
     override method disminuirCupo() {
         limiteDeCupo = limiteDeCupo - 1
+    }
+    override method sueldoDe(_curso) {
+        return super(_curso) + 3 * limiteDeCupo
     }
 }

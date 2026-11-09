@@ -2,6 +2,7 @@ import cursos.*
 import docentes.*
 import estudiantes.*
 import tiposdenado.*
+import escuelaDeNatacion.*
 
 
 describe "natacion" {
@@ -21,7 +22,10 @@ describe "natacion" {
   const jueves = new CursoBase(docente = isa, cupoMaximo = 3, estudiantesInscriptos=#{milena,rodrigo})
   const viernes = new CursoBase(docente = nico, cupoMaximo = 3, estudiantesInscriptos = #{milena, rodrigo})
   const colonia = new EscuelitaDeNiños(docente=debi, cupoMaximo = 3, estudiantesInscriptos=#{milena,rodrigo})
-  const rehabilitacion = new Terapeutico(docente = mara, cupoMaximo =4, estudiantesInscriptos = #{milena, camilo})
+  const rehabilitacion = new Terapeutico(docente = mara, cupoMaximo =4, estudiantesInscriptos = #{milena, camilo},
+                                         recaudacionBruta = 300)
+
+  const toninas = new EscuelaDeNatacion(recaudacionTotal = 1000, cursos = #{martes,jueves,viernes,colonia, rehabilitacion})
  
   
   test "1. a. curso basico (no guardavida)" {
@@ -70,5 +74,25 @@ test "1.d. escuela de niños" {
   assert.throwsException({rehabilitacion.inscribirA(rodrigo)})
   assert.equals(#{milena,camilo,matilda}, rehabilitacion.estudiantesInscriptos())
  }
+ test "2.1 recaudacion" {   
+  assert.equals(7.9, martes.recaudacion())  
+  assert.equals(7.9, jueves.recaudacion())
+  assert.equals(6.35, viernes.recaudacion())
+  assert.equals(457.9, colonia.recaudacion())
+  assert.equals(244, rehabilitacion.recaudacion())
+  assert.equals(724.05, toninas.recaudacionDeCursos())
+
+  toninas.cobrarRecaudacion()
+  assert.equals(1724.05, toninas.recaudacionTotal())
+  toninas.cobrarRecaudacion()
+  assert.equals(2448.1, toninas.recaudacionTotal())
+}
+ test "3 consultas" {
+  assert.equals(rehabilitacion, toninas.cursoQueDomina(espalda))
+  viernes.inscribirA(camilo)
+  assert.equals(#{martes, jueves,colonia}, toninas.cursosInfantiles())
+  assert.equals(#{debi,isa}, toninas.docentesInfantiles().asSet())
+  }
+
 
 }

@@ -1,5 +1,3 @@
-import tiposdenado.*
-
 class Estudiante {
     var estilosDominados = #{}
     var edad
@@ -15,5 +13,8 @@ class Estudiante {
     }
     method domina(estilo) {
         return estilosDominados.contains(estilo)
+    }
+    method totalDeDescuentos() {
+        return estilosDominados.sum({estilo => estilo.descuento()})
     }
 }
